@@ -14,7 +14,7 @@ if not PUSHOVER_USER or not PUSHOVER_TOKEN:
 
 
 def send_pushover_message(message):
-    url = 'https://pushover.net'
+    url = 'https://api.pushover.net/1/messages.json'
     data = {
         'token': PUSHOVER_TOKEN,
         'user': PUSHOVER_USER,
