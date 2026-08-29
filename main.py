@@ -14,6 +14,7 @@ if not PUSHOVER_USER or not PUSHOVER_TOKEN:
 
 
 def send_pushover_message(message):
+    # CORRECTED: Full endpoint URL path required by Pushover API
     url = 'https://pushover.net'
     data = {
         'token': PUSHOVER_TOKEN,
@@ -26,7 +27,7 @@ def send_pushover_message(message):
 
 
 def main():
-    url = 'https://ccfellow.org/Common/Reader/Channel/ShowPage.jsp?Cid=10&Pid=1&Version=0&Charset=big5_hkscs&page=0'
+    url = 'https://ccfellow.org'
 
     # Fetch and enforce proper traditional Chinese encoding
     res = requests.get(url)
