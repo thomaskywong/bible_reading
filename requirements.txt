@@ -1,2 +1,8 @@
 requests
 beautifulsoup4
+lxml
+html5lib
+pandas
+tqdm
+fake-useragent
+cloudscraper
