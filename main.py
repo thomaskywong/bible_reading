@@ -14,7 +14,7 @@ if not PUSHOVER_USER or not PUSHOVER_TOKEN:
 
 
 def send_pushover_message(message):
-    url = 'https://api.pushover.net/1/messages.json'
+    url = 'https://pushover.net'
     data = {
         'token': PUSHOVER_TOKEN,
         'user': PUSHOVER_USER,
@@ -28,21 +28,28 @@ def send_pushover_message(message):
 def main():
     url = 'https://ccfellow.org/Common/Reader/Channel/ShowPage.jsp?Cid=10&Pid=1&Version=0&Charset=big5_hkscs&page=0'
 
-    response = BeautifulSoup(requests.get(url).text, 'html.parser')
+    # Fetch and enforce proper traditional Chinese encoding
+    res = requests.get(url)
+    res.encoding = 'big5_hkscs'
 
-    title_cells = response.find_all('td', class_='devotiontxtbold2')
-    title_zh = title_cells[0].get_text(strip=True)
+    soup = BeautifulSoup(res.text, 'html.parser')
 
-    url_cells = response.find_all('tr', class_='txtwhite12')
-    audio_url = url_cells[0].find('a')['href']
+    # Fixed bug: Changed find_all to find so .get_text() works seamlessly
+    title_element = soup.find('td', class_='devotiontxtbold2')
+    url_element = soup.find('tr', class_='txtwhite12')
 
+    # Defensive check if site format changes unexpectedly
+    if not title_element or not url_element or not url_element.find('a'):
+        raise RuntimeError(
+            "Failed to parse website elements. The site layout might have updated.")
+
+    title_zh = title_element.get_text(strip=True)
+    audio_url = url_element.find('a')['href']
+
+    # Get local Hong Kong Time date
     tz = ZoneInfo('Asia/Hong_Kong')
     today = dt.datetime.now(tz)
-    year = today.year
-    month = today.month
-    day = today.day
-
-    date_string = f"{year}年{month}月{day}日"
+    date_string = f"{today.year}年{today.month}月{today.day}日"
 
     message = f"""{date_string} [一日一恩典]
 《天天天言》- {title_zh}
