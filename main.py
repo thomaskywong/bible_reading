@@ -67,7 +67,7 @@ def main():
 
     message = f"""{date_string} [一日一恩典]
 《天天天言》- {title_zh}
-閲讀原文：
+閱讀原文：
 {url}
 收聽：
 {audio_url}
