@@ -25,6 +25,16 @@ def send_pushover_message(message):
     return response.json()
 
 
+def decode_response_content(res):
+    for encoding in ['utf-8', 'big5_hkscs', 'big5', 'cp950']:
+        try:
+            return res.content.decode(encoding)
+        except UnicodeDecodeError:
+            continue
+
+    return res.content.decode('utf-8', errors='replace')
+
+
 def main():
     url = 'https://ccfellow.org/Common/Reader/Channel/ShowPage.jsp?Cid=10&Pid=1&Version=0&Charset=big5_hkscs&page=0'
 
@@ -33,7 +43,9 @@ def main():
     # res.encoding = 'big5_hkscs'
     # soup = BeautifulSoup(res.text, 'html.parser')
 
-    html = res.content.decode('big5_hkscs', errors='replace')
+    # html = res.content.decode('big5_hkscs', errors='replace')
+
+    html = decode_response_content(res)
     soup = BeautifulSoup(html, 'html.parser')
 
     # Fixed bug: Changed find_all to find so .get_text() works seamlessly
