@@ -30,9 +30,11 @@ def main():
 
     # Fetch and enforce proper traditional Chinese encoding
     res = requests.get(url)
-    res.encoding = 'big5_hkscs'
+    # res.encoding = 'big5_hkscs'
+    # soup = BeautifulSoup(res.text, 'html.parser')
 
-    soup = BeautifulSoup(res.text, 'html.parser')
+    html = res.content.decode('big5_hkscs', errors='replace')
+    soup = BeautifulSoup(html, 'html.parser')
 
     # Fixed bug: Changed find_all to find so .get_text() works seamlessly
     title_element = soup.find('td', class_='devotiontxtbold2')
